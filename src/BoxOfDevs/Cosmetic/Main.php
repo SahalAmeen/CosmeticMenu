@@ -9,6 +9,7 @@ Use pocketmine\math\Vector3;
 use pocketmine\event\server\DataPacketReceiveEvent;
 use pocketmine\event\player\PlayerItemHeldEvent;
 use pocketmine\event\entity\ProjectileHitEvent;
+use pocketmine\event\entity\ProjectileLaunchEvent;
 use pocketmine\level\particle\RedstoneParticle;
 use pocketmine\utils\Config;
 use pocketmine\level\Level;
@@ -16,11 +17,12 @@ use pocketmine\level\particle\HugeExplodeParticle;
 use pocketmine\level\particle\WaterParticle;
 use pocketmine\level\particle\AngryVillagerParticle;
 use pocketmine\entity\Arrow;
+use pocketmine\entity\Snowball;
 use pocketmine\nbt\tag\FloatTag;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\inventory\Inventory;
-use pocketmine\nbt\tag\EnumTag;
 use pocketmine\nbt\tag\DoubleTag;
+use pocketmine\nbt\tag\ListTag;
 use pocketmine\entity\Entity;
 use pocketmine\item\Item;
 use pocketmine\Player;
@@ -37,7 +39,6 @@ Class Main extends PluginBase implements Listener{
      public function onEnable(){
         $this->getServer()->getPluginManager()->registerEvents($this, $this);
         $this->getLogger()->info("§aCosmeticMenu by BoxOfDevs loaded ;D!");
-        $this->enderpearl = [];
         }
        public function onPacketReceived(DataPacketReceiveEvent $event){
             $pk = $event->getPacket();
@@ -82,19 +83,19 @@ $player->sendTIP("§aused Leap!");
 //Egg Launcher
 if($item->getId() == 346){
 						$nbt = new CompoundTag ( "", [ 
-				"Pos" => new EnumTag ( "Pos", [ 
-						new Double ( "", $player->x ),
-						new Double ( "", $player->y + $player->getEyeHeight () ),
-						new Double ( "", $player->z ) 
+				"Pos" => new ListTag ( "Pos", [ 
+						new DoubleTag ( "", $player->x ),
+						new DoubleTag ( "", $player->y + $player->getEyeHeight () ),
+						new DoubleTag ( "", $player->z ) 
 				] ),
-				"Motion" => new EnumTag ( "Motion", [
-                                                new Double ( "", - \sin ( $player->yaw / 180 * M_PI ) *\cos ( $player->pitch / 180 * M_PI ) ),
-						new Double ( "", - \sin ( $player->pitch / 180 * M_PI ) ),
-						new Double ( "",\cos ( $player->yaw / 180 * M_PI ) *\cos ( $player->pitch / 180 * M_PI ) ) 
+				"Motion" => new ListTag ( "Motion", [
+                                                new DoubleTag ( "", - \sin ( $player->yaw / 180 * M_PI ) *\cos ( $player->pitch / 180 * M_PI ) ),
+						new DoubleTag ( "", - \sin ( $player->pitch / 180 * M_PI ) ),
+						new DoubleTag ( "",\cos ( $player->yaw / 180 * M_PI ) *\cos ( $player->pitch / 180 * M_PI ) ) 
 				] ),
-				"Rotation" => new EnumTag ( "Rotation", [ 
-						new Float ( "", $player->yaw ),
-						new Float ( "", $player->pitch ) 
+				"Rotation" => new ListTag ( "Rotation", [ 
+						new FloatTag ( "", $player->yaw ),
+						new FloatTag ( "", $player->pitch ) 
 				] ) 
 		] );
                                                 
@@ -105,29 +106,30 @@ if($item->getId() == 346){
 		$snowball->setMotion ( $snowball->getMotion ()->multiply ( $f ) );
 		$snowball->spawnToAll ();
 	}
-    if($item->getId() === 332) {
-        $nbt = new CompoundTag ( "", [ 
-				"Pos" => new EnumTag ( "Pos", [ 
-						new Double ( "", $player->x ),
-						new Double ( "", $player->y + $player->getEyeHeight () ),
-						new Double ( "", $player->z ) 
+    if($item->getId() == 332){
+						$nbt = new CompoundTag ( "", [ 
+				"Pos" => new ListTag ( "Pos", [ 
+						new DoubleTag ( "", $player->x ),
+						new DoubleTag ( "", $player->y + $player->getEyeHeight () ),
+						new DoubleTag ( "", $player->z ) 
 				] ),
-				"Motion" => new EnumTag ( "Motion", [
-                                                new Double ( "", - \sin ( $player->yaw / 180 * M_PI ) *\cos ( $player->pitch / 180 * M_PI ) ),
-						new Double ( "", - \sin ( $player->pitch / 180 * M_PI ) ),
-						new Double ( "",\cos ( $player->yaw / 180 * M_PI ) *\cos ( $player->pitch / 180 * M_PI ) ) 
+				"Motion" => new ListTag ( "Motion", [
+                                                new DoubleTag ( "", - \sin ( $player->yaw / 180 * M_PI ) *\cos ( $player->pitch / 180 * M_PI ) ),
+						new DoubleTag ( "", - \sin ( $player->pitch / 180 * M_PI ) ),
+						new DoubleTag ( "",\cos ( $player->yaw / 180 * M_PI ) *\cos ( $player->pitch / 180 * M_PI ) ) 
 				] ),
-				"Rotation" => new EnumTag ( "Rotation", [ 
-						new Float ( "", $player->yaw ),
-						new Float ( "", $player->pitch ) 
+				"Rotation" => new ListTag ( "Rotation", [ 
+						new FloatTag ( "", $player->yaw ),
+						new FloatTag ( "", $player->pitch ) 
 				] ) 
 		] );
-        $motion = 2 % 100;
+                                                
+                  
+		     $motion = 2 % 100;
 		$f = $motion;
 		$snowball = Entity::createEntity ( "Snowball", $player->chunk, $nbt, $player );
 		$snowball->setMotion ( $snowball->getMotion ()->multiply ( $f ) );
 		$snowball->spawnToAll ();
-        $this->enderpearl[$snowball] = $player;
     }
 //Items
    if($item->getId() == 347){
@@ -338,7 +340,7 @@ if($item->getId() == 310){
 				}
 				$y = round($this->y + $this->shootingEntity->height);
 				
-				$this->shootingEntity->teleport(new Vector3($x, $y, $z));
+				// $this->shootingEntity->teleport(new Vector3($x, $y, $z));
 				
 				$this->kill();
 				$hasUpdate = false;
@@ -352,12 +354,10 @@ if($item->getId() == 310){
     
     public function onProjectileHit(ProjectileHitEvent $event) {
         $snowball = $event->getEntity();
-        if(isset($this->enderpearl[$snowball])) { // if the snowball is an enderpearl
             $loc = $snowball->getLocation();
-            if($this->enderpearl[$snowball] instanceof Player) { // if the player is online
-                $this->enderpearl[$snowball]->teleport(new Vector3($loc->x, $loc->y, $loc->z), $loc->yaw, $loc->pitch);
+            if($snowball->shootingEntity instanceof Player) { // if the player is online
+                $snowball->shootingEntity->teleport(new Vector3($loc->x, $loc->y, $loc->z), $loc->yaw, $loc->pitch);
             }
-        }
     }
 	public function spawnTo(Player $player) {
 		$pk = new AddItemEntityPacket;
