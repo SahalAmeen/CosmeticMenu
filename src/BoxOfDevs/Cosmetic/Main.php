@@ -228,6 +228,7 @@ if($item->getId() == 310){
       $player->getInventory()->addItem(Item::get(ITEM::FISHING_ROD));
       $player->getInventory()->addItem(Item::get(ITEM::SLIMEBALL));
       $player->getInventory()->addItem(Item::get(ITEM::IRON_AXE));     
+      $player->getInventory()->addItem(Item::get(ITEM::SNOWBALL, 0, 16));     
       $player->getInventory()->addItem(Item::get(ITEM::BED));     
 }
 //Partical
@@ -246,6 +247,7 @@ if($item->getId() == 310){
    if($item->getId() == 355){
       $player->getInventory()->removeItem(Item::get(ITEM::BED));
       $player->getInventory()->removeItem(Item::get(ITEM::SLIMEBALL));
+      $player->getInventory()->removeItem(Item::get(ITEM::SNOWBALL));
       $player->getInventory()->removeItem(Item::get(ITEM::IRON_AXE));
       $player->getInventory()->removeItem(Item::get(ITEM::MINECART));
       $player->getInventory()->removeItem(Item::get(ITEM::GLOWSTONE));
@@ -315,47 +317,11 @@ if($item->getId() == 310){
      $p->sendPopup("§l§7Back...");  
      } 
    }
-	public function onUpdate($currentTick) {
-        if ($this->closed) {
-            return false;
-        }
-        $this->timings->startTiming();
-        $hasUpdate = parent::onUpdate($currentTick);
-		
-		if ($this->shootingEntity instanceof Player) {
-			$bb = $this->getBoundingBox();
-			if((count($this->level->getCollisionBlocks($bb, true)) > 0 || $this->hadCollision) && $hasUpdate){
-				$x = round($this->x);
-				$z = round($this->z);
-				
-				$iterNum = 0;
-				while (!($this->level->getBlock(new Vector3($x, round($this->y), $z)) instanceof Air)) {
-					$x = $x > $this->shootingEntity->x ? $x - 1 : $x + 1;
-					$z = $z > $this->shootingEntity->z ? $z - 1 : $z + 1;
-					if ($iterNum < 5) {
-						$iterNum++;
-					} else {
-						break;
-					}
-				}
-				$y = round($this->y + $this->shootingEntity->height);
-				
-				// $this->shootingEntity->teleport(new Vector3($x, $y, $z));
-				
-				$this->kill();
-				$hasUpdate = false;
-			}
-		}
-		
-		$this->timings->stopTiming();
-        
-        return $hasUpdate;
-    }
     
     public function onProjectileHit(ProjectileHitEvent $event) {
         $snowball = $event->getEntity();
             $loc = $snowball->getLocation();
-            if($snowball->shootingEntity instanceof Player) { // if the player is online
+            if($snowball->shootingEntity instanceof Player and $snowball instanceof Snowball) { // if the player is online
                 $snowball->shootingEntity->teleport(new Vector3($loc->x, $loc->y, $loc->z), $loc->yaw, $loc->pitch);
             }
     }
