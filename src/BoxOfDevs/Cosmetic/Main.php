@@ -65,20 +65,28 @@ return true;
    }
       
        if($item->getId() == 258){
-      if($player->getDirection() == 0){
-        $player->knockBack($player, 0, 1, 0, 1);
-      }
-      elseif($player->getDirection() == 1){
-        $player->knockBack($player, 0, 0, 1, 1);
-      }
-      elseif($player->getDirection() == 2){
-        $player->knockBack($player, 0, -1, 0, 1);
-      }
-      elseif($player->getDirection() == 3){
-        $player->knockBack($player, 0, 0, -1, 1);
-        }
+           $yaw = $player->yaw;
+           if (0 <= $yaw and $yaw < 22.5) {
+			      $player->knockBack($player, 0, 0, 1, 1.5);
+           } elseif (22.5 <= $yaw and $yaw < 67.5) {
+                    $player->knockBack($player, 0, -1, 1, 1.5);
+           } elseif (67.5 <= $yaw and $yaw < 112.5) {
+                    $player->knockBack($player, 0, -1, 0, 1.5);
+           } elseif (112.5 <= $yaw and $yaw < 157.5) {
+                    $player->knockBack($player, 0, -1, -1, 1.5);
+           } elseif (157.5 <= $yaw and $yaw < 202.5) {
+                    $player->knockBack($player, 0, 0, -1, 1.5);
+           } elseif (202.5 <= $yaw and $yaw < 247.5) {
+                    $player->knockBack($player, 0, 1, -1, 1.5);
+           } elseif (247.5 <= $yaw and $yaw < 292.5) {
+                   $player->knockBack($player, 0, 1, 0, 1.5);
+           } elseif (292.5 <= $yaw and $yaw < 337.5) {
+                    $player->knockBack($player, 0, 1, 1, 1.5);
+           } elseif (337.5 <= $yaw and $yaw < 360.0) {
+                    $player->knockBack($player, 0, 0, 1, 1.5);
+           }
       
-$player->sendTIP("§aused Leap!");
+$player->sendPopup("§aUsed Leap!");
    }
 //Egg Launcher
 if($item->getId() == 346){
