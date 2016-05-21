@@ -1,6 +1,6 @@
 <?php
 
-Namespace ImagicalDevs\Cosmetic;
+Namespace BoxOfDevs\Cosmetic;
 
 use pocketmine\plugin\PluginBase;
 use pocketmine\event\Listener;
@@ -8,6 +8,7 @@ use pocketmine\network\protocol\UseItemPacket;
 Use pocketmine\math\Vector3;
 use pocketmine\event\server\DataPacketReceiveEvent;
 use pocketmine\event\player\PlayerItemHeldEvent;
+use pocketmine\event\entity\ProjectileHitEvent;
 use pocketmine\level\particle\RedstoneParticle;
 use pocketmine\utils\Config;
 use pocketmine\level\Level;
@@ -35,7 +36,8 @@ Class Main extends PluginBase implements Listener{
 	
      public function onEnable(){
         $this->getServer()->getPluginManager()->registerEvents($this, $this);
-        $this->getLogger()->info("§aCosmeticMenu by ImagicalDevs loaded ;D!");
+        $this->getLogger()->info("§aCosmeticMenu by BoxOfDevs loaded ;D!");
+        $this->enderpearl = [];
         }
        public function onPacketReceived(DataPacketReceiveEvent $event){
             $pk = $event->getPacket();
@@ -79,18 +81,18 @@ $player->sendTIP("§aused Leap!");
    }
 //Egg Launcher
 if($item->getId() == 346){
-						$nbt = new Compound ( "", [ 
-				"Pos" => new Enum ( "Pos", [ 
+						$nbt = new CompoundTag ( "", [ 
+				"Pos" => new EnumTag ( "Pos", [ 
 						new Double ( "", $player->x ),
 						new Double ( "", $player->y + $player->getEyeHeight () ),
 						new Double ( "", $player->z ) 
 				] ),
-				"Motion" => new Enum ( "Motion", [
+				"Motion" => new EnumTag ( "Motion", [
                                                 new Double ( "", - \sin ( $player->yaw / 180 * M_PI ) *\cos ( $player->pitch / 180 * M_PI ) ),
 						new Double ( "", - \sin ( $player->pitch / 180 * M_PI ) ),
 						new Double ( "",\cos ( $player->yaw / 180 * M_PI ) *\cos ( $player->pitch / 180 * M_PI ) ) 
 				] ),
-				"Rotation" => new Enum ( "Rotation", [ 
+				"Rotation" => new EnumTag ( "Rotation", [ 
 						new Float ( "", $player->yaw ),
 						new Float ( "", $player->pitch ) 
 				] ) 
@@ -103,6 +105,30 @@ if($item->getId() == 346){
 		$snowball->setMotion ( $snowball->getMotion ()->multiply ( $f ) );
 		$snowball->spawnToAll ();
 	}
+    if($item->getId() === 332) {
+        $nbt = new CompoundTag ( "", [ 
+				"Pos" => new EnumTag ( "Pos", [ 
+						new Double ( "", $player->x ),
+						new Double ( "", $player->y + $player->getEyeHeight () ),
+						new Double ( "", $player->z ) 
+				] ),
+				"Motion" => new EnumTag ( "Motion", [
+                                                new Double ( "", - \sin ( $player->yaw / 180 * M_PI ) *\cos ( $player->pitch / 180 * M_PI ) ),
+						new Double ( "", - \sin ( $player->pitch / 180 * M_PI ) ),
+						new Double ( "",\cos ( $player->yaw / 180 * M_PI ) *\cos ( $player->pitch / 180 * M_PI ) ) 
+				] ),
+				"Rotation" => new EnumTag ( "Rotation", [ 
+						new Float ( "", $player->yaw ),
+						new Float ( "", $player->pitch ) 
+				] ) 
+		] );
+        $motion = 2 % 100;
+		$f = $motion;
+		$snowball = Entity::createEntity ( "Snowball", $player->chunk, $nbt, $player );
+		$snowball->setMotion ( $snowball->getMotion ()->multiply ( $f ) );
+		$snowball->spawnToAll ();
+        $this->enderpearl[$snowball] = $player;
+    }
 //Items
    if($item->getId() == 347){
       $player->getInventory()->removeItem(Item::get(ITEM::CLOCK));
@@ -323,7 +349,16 @@ if($item->getId() == 310){
         
         return $hasUpdate;
     }
-	
+    
+    public function onProjectileHit(ProjectileHitEvent $event) {
+        $snowball = $event->getEntity();
+        if(isset($this->enderpearl[$snowball])) { // if the snowball is an enderpearl
+            $loc = $snowball->getLocation();
+            if($this->enderpearl[$snowball] instanceof Player) { // if the player is online
+                $this->enderpearl[$snowball]->teleport(new Vector3($loc->x, $loc->y, $loc->z), $loc->yaw, $loc->pitch);
+            }
+        }
+    }
 	public function spawnTo(Player $player) {
 		$pk = new AddItemEntityPacket;
 		$pk->eid = $this->getID();
