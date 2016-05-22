@@ -17,11 +17,11 @@ A plugin that let you use gadgets with a tap of a clock.
   - [x] Gold
   - [x] Chain
   - [x] Leather 
-- [ ] Particles
-  - [ ] Fire
-  - [ ] Water 
-  - [ ] Smoke 
-  - [ ] Hearts
+- [x] Particles
+  - [x] Fire
+  - [x] Water 
+  - [x] Smoke 
+  - [x] Hearts
 - [ ] Effects
   - [ ] Soon
 
