@@ -9,8 +9,8 @@ A plugin that let you use gadgets with a tap of a clock.
   - [x] Egg Launcher 
   - [x] ParticleBomb
   - [x] BunnnyHop
-  - Lightning stick 
-  - EnderPearl 
+  - [ ] Lightning stick 
+  - [x] EnderPearl 
 - [x] Armour
   - [x] Diamond
   - [x] Iron
@@ -18,10 +18,10 @@ A plugin that let you use gadgets with a tap of a clock.
   - [x] Chain
   - [x] Leather 
 - [ ] Particles
-  - Fire
-  - Water 
-  - Smoke 
-  - Hearts
+  - [ ] Fire
+  - [ ] Water 
+  - [ ] Smoke 
+  - [ ] Hearts
 - [ ] Effects
-  - Soon
+  - [ ] Soon
 
