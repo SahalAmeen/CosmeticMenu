@@ -17,6 +17,7 @@ use pocketmine\level\particle\HugeExplodeParticle;
 use pocketmine\level\particle\WaterParticle;
 use pocketmine\level\particle\AngryVillagerParticle;
 use pocketmine\entity\Arrow;
+use pocketmine\utils\Random;
 use pocketmine\entity\Snowball;
 use pocketmine\nbt\tag\FloatTag;
 use pocketmine\nbt\tag\CompoundTag;
@@ -92,9 +93,9 @@ $player->sendPopup("§aUsed Leap!");
 if($item->getId() == 346){
 						$nbt = new CompoundTag ( "", [ 
 				"Pos" => new ListTag ( "Pos", [ 
-						new DoubleTag ( "", $player->x ),
+						new DoubleTag ( "", $player->x),
 						new DoubleTag ( "", $player->y + $player->getEyeHeight () ),
-						new DoubleTag ( "", $player->z ) 
+						new DoubleTag ( "", $player->z) 
 				] ),
 				"Motion" => new ListTag ( "Motion", [
                                                 new DoubleTag ( "", - \sin ( $player->yaw / 180 * M_PI ) *\cos ( $player->pitch / 180 * M_PI ) ),
@@ -113,13 +114,13 @@ if($item->getId() == 346){
 		$snowball = Entity::createEntity ( "Egg", $player->chunk, $nbt, $player );
 		$snowball->setMotion ( $snowball->getMotion ()->multiply ( $f ) );
 		$snowball->spawnToAll ();
-	}
+	} // EnderPearl
     if($item->getId() == 332){
 						$nbt = new CompoundTag ( "", [ 
 				"Pos" => new ListTag ( "Pos", [ 
-						new DoubleTag ( "", $player->x ),
+						new DoubleTag ( "", $player->x),
 						new DoubleTag ( "", $player->y + $player->getEyeHeight () ),
-						new DoubleTag ( "", $player->z ) 
+						new DoubleTag ( "", $player->z) 
 				] ),
 				"Motion" => new ListTag ( "Motion", [
                                                 new DoubleTag ( "", - \sin ( $player->yaw / 180 * M_PI ) *\cos ( $player->pitch / 180 * M_PI ) ),
@@ -138,6 +139,58 @@ if($item->getId() == 346){
 		$snowball = Entity::createEntity ( "Snowball", $player->chunk, $nbt, $player );
 		$snowball->setMotion ( $snowball->getMotion ()->multiply ( $f ) );
 		$snowball->spawnToAll ();
+    }
+    if($item->getId() === 351) { // Dye
+        switch($item->getDamage()) {
+            case 4: // lapis: water
+				$particle = new \pocketmine\level\particle\BubbleParticle(new Vector3($player->x, $player->y + 2, $player->z));
+			    $random = new Random((int) (microtime(true) * 1000) + mt_rand());
+					for($i = 0; $i < 90; ++$i){
+						$particle->setComponents(
+						$player->x - 2 + $random->nextSignedFloat() * $player->x + 2,
+						$player->y - 0.5 + $random->nextSignedFloat() * $player->y + 1.5,
+						$player->z - 2 + $random->nextSignedFloat() * $player->z + 2
+						);
+			      $level->addParticle($particle);
+				  }
+            break;
+            case 14: // orange: fire
+				$particle = new \pocketmine\level\particle\EntityFlameParticle(new Vector3($player->x, $player->y + 2, $player->z));
+			    $random = new Random((int) (microtime(true) * 1000) + mt_rand());
+					for($i = 0; $i <90; ++$i){
+						$particle->setComponents(
+						$player->x - 2 + $random->nextSignedFloat() * $player->x+ 2,
+						$player->y - 0.5 + $random->nextSignedFloat() * $player->y + 1.5,
+						$player->z - 2 + $random->nextSignedFloat() * $player->z + 2
+						);
+			      $level->addParticle($particle);
+				  }
+            break;
+            case 1: // red: heart
+				$particle = new \pocketmine\level\particle\HeartParticle(new Vector3($player->x, $player->y + 2, $player->z));
+			    $random = new Random((int) (microtime(true) * 1000) + mt_rand());
+					for($i = 0; $i < 90; ++$i){
+						$particle->setComponents(
+						$player->x - 2 + $random->nextSignedFloat() * $player->x + 2,
+						$player->y - 0.5 + $random->nextSignedFloat() * $player->y + 1.5,
+						$player->z - 2 + $random->nextSignedFloat() * $player->z + 2
+						);
+			      $level->addParticle($particle);
+				  }
+            break;
+            case 15: // white: smoke
+				$particle = new HugeExplodeParticle(new Vector3($player->x, $player->y + 2, $player->z), 10);
+			    $random = new Random((int) (microtime(true) * 1000) + mt_rand());
+					for($i = 0; $i < 90; ++$i){
+						$particle->setComponents(
+						$player->x - 2 + $random->nextSignedFloat() * $player->x + 2,
+						$player->y - 0.5 + $random->nextSignedFloat() * $player->y + 1.5,
+						$player->z - 2 + $random->nextSignedFloat() * $player->z + 2
+						);
+			      $level->addParticle($particle);
+				  }
+            break;
+        }
     }
 //Items
    if($item->getId() == 347){
@@ -255,7 +308,7 @@ if($item->getId() == 310){
    if($item->getId() == 355){
       $player->getInventory()->removeItem(Item::get(ITEM::BED));
       $player->getInventory()->removeItem(Item::get(ITEM::SLIMEBALL));
-      $player->getInventory()->removeItem(Item::get(ITEM::SNOWBALL));
+      $player->getInventory()->removeItem(Item::get(ITEM::SNOWBALL, 0, 16));
       $player->getInventory()->removeItem(Item::get(ITEM::IRON_AXE));
       $player->getInventory()->removeItem(Item::get(ITEM::MINECART));
       $player->getInventory()->removeItem(Item::get(ITEM::GLOWSTONE));
