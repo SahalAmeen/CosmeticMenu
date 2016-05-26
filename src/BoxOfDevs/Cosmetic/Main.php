@@ -2,10 +2,11 @@
 
 Namespace BoxOfDevs\Cosmetic;
 
+use pocketmine\event\entity\ExplosionPrimeEvent;
 use pocketmine\plugin\PluginBase;
 use pocketmine\event\Listener;
 use pocketmine\network\protocol\UseItemPacket;
-Use pocketmine\math\Vector3;
+use pocketmine\math\Vector3;
 use pocketmine\event\server\DataPacketReceiveEvent;
 use pocketmine\event\player\PlayerItemHeldEvent;
 use pocketmine\event\entity\ProjectileHitEvent;
@@ -90,15 +91,15 @@ return true;
 $player->sendPopup("§aUsed Leap!");
    }
 //Egg Launcher
-if($item->getId() == 346){
+if($item->getId() == 329){
 						$nbt = new CompoundTag ( "", [ 
 				"Pos" => new ListTag ( "Pos", [ 
-						new DoubleTag ( "", $player->x),
+						new DoubleTag ( "", $player->x ),
 						new DoubleTag ( "", $player->y + $player->getEyeHeight () ),
-						new DoubleTag ( "", $player->z) 
+						new DoubleTag ( "", $player->z ) 
 				] ),
-				"Motion" => new ListTag ( "Motion", [
-                                                new DoubleTag ( "", - \sin ( $player->yaw / 180 * M_PI ) *\cos ( $player->pitch / 180 * M_PI ) ),
+				"Motion" => new ListTag ( "Motion", [ 
+						new DoubleTag ( "", - \sin ( $player->yaw / 180 * M_PI ) *\cos ( $player->pitch / 180 * M_PI ) ),
 						new DoubleTag ( "", - \sin ( $player->pitch / 180 * M_PI ) ),
 						new DoubleTag ( "",\cos ( $player->yaw / 180 * M_PI ) *\cos ( $player->pitch / 180 * M_PI ) ) 
 				] ),
@@ -107,10 +108,9 @@ if($item->getId() == 346){
 						new FloatTag ( "", $player->pitch ) 
 				] ) 
 		] );
-                                                
-                  
-		     $motion = 2 % 100;
-		$f = $motion;
+		
+		
+		$f = 1.0;
 		$snowball = Entity::createEntity ( "Egg", $player->chunk, $nbt, $player );
 		$snowball->setMotion ( $snowball->getMotion ()->multiply ( $f ) );
 		$snowball->spawnToAll ();
@@ -118,12 +118,12 @@ if($item->getId() == 346){
     if($item->getId() == 332){
 						$nbt = new CompoundTag ( "", [ 
 				"Pos" => new ListTag ( "Pos", [ 
-						new DoubleTag ( "", $player->x),
+						new DoubleTag ( "", $player->x ),
 						new DoubleTag ( "", $player->y + $player->getEyeHeight () ),
-						new DoubleTag ( "", $player->z) 
+						new DoubleTag ( "", $player->z ) 
 				] ),
-				"Motion" => new ListTag ( "Motion", [
-                                                new DoubleTag ( "", - \sin ( $player->yaw / 180 * M_PI ) *\cos ( $player->pitch / 180 * M_PI ) ),
+				"Motion" => new ListTag ( "Motion", [ 
+						new DoubleTag ( "", - \sin ( $player->yaw / 180 * M_PI ) *\cos ( $player->pitch / 180 * M_PI ) ),
 						new DoubleTag ( "", - \sin ( $player->pitch / 180 * M_PI ) ),
 						new DoubleTag ( "",\cos ( $player->yaw / 180 * M_PI ) *\cos ( $player->pitch / 180 * M_PI ) ) 
 				] ),
@@ -132,10 +132,9 @@ if($item->getId() == 346){
 						new FloatTag ( "", $player->pitch ) 
 				] ) 
 		] );
-                                                
-                  
-		     $motion = 2 % 100;
-		$f = $motion;
+		
+		
+		$f = 1.0;
 		$snowball = Entity::createEntity ( "Snowball", $player->chunk, $nbt, $player );
 		$snowball->setMotion ( $snowball->getMotion ()->multiply ( $f ) );
 		$snowball->spawnToAll ();
@@ -179,7 +178,7 @@ if($item->getId() == 346){
 				  }
             break;
             case 15: // white: smoke
-				$particle = new HugeExplodeParticle(new Vector3($player->x, $player->y + 2, $player->z), 10);
+				$particle = new HugeExplodeParticle(new Vector3($player->x, $player->y + 2, $player->z), 5);
 			    $random = new Random((int) (microtime(true) * 1000) + mt_rand());
 					for($i = 0; $i < 90; ++$i){
 						$particle->setComponents(
@@ -192,6 +191,33 @@ if($item->getId() == 346){
             break;
         }
     }
+    //TNTLauncher
+    if($item->getId() == 352){
+						foreach($player->getInventory()->getContents() as $item){
+						$nbt = new CompoundTag ( "", [ 
+				"Pos" => new ListTag ( "Pos", [ 
+						new DoubleTag ( "", $player->x ),
+						new DoubleTag ( "", $player->y + $player->getEyeHeight () ),
+						new DoubleTag ( "", $player->z ) 
+				] ),
+				"Motion" => new ListTag ( "Motion", [ 
+						new DoubleTag ( "", - \sin ( $player->yaw / 180 * M_PI ) *\cos ( $player->pitch / 180 * M_PI ) ),
+						new DoubleTag ( "", - \sin ( $player->pitch / 180 * M_PI ) ),
+						new DoubleTag ( "",\cos ( $player->yaw / 180 * M_PI ) *\cos ( $player->pitch / 180 * M_PI ) ) 
+				] ),
+				"Rotation" => new ListTag ( "Rotation", [ 
+						new FloatTag ( "", $player->yaw ),
+						new FloatTag ( "", $player->pitch ) 
+				] ) 
+		] );
+		
+		
+		$f = 3.0;
+		$snowball = Entity::createEntity ( "PrimedTNT", $player->chunk, $nbt, $player );
+		$snowball->setMotion ( $snowball->getMotion ()->multiply ( $f ) );
+		$snowball->spawnToAll ();
+		}
+     }
 //Items
    if($item->getId() == 347){
       $player->getInventory()->removeItem(Item::get(ITEM::CLOCK));
@@ -206,8 +232,8 @@ if($item->getId() == 310){
       $player->getInventory()->removeItem(Item::get(ITEM::GLOWSTONE_DUST));
       $player->getInventory()->addItem(Item::get(ITEM::DIAMOND));
       $player->getInventory()->addItem(Item::get(ITEM::IRON_INGOT));
-      $player->getInventory()->addItem(Item::get(ITEM::GOLD_INGOT));
       $player->getInventory()->addItem(Item::get(ITEM::GUNPOWDER));
+      $player->getInventory()->addItem(Item::get(ITEM::GOLD_INGOT));
       $player->getInventory()->addItem(Item::get(ITEM::LEATHER));
       }
       //Diamond Armour
@@ -286,11 +312,12 @@ if($item->getId() == 310){
       $player->getInventory()->removeItem(Item::get(ITEM::MINECART));
       $player->getInventory()->removeItem(Item::get(ITEM::GLOWSTONE_DUST));
       $player->getInventory()->removeItem(Item::get(ITEM::DIAMOND_HELMET));
-      $player->getInventory()->addItem(Item::get(ITEM::FISHING_ROD));
+      $player->getInventory()->addItem(Item::get(ITEM::BED)); 
+      $player->getInventory()->addItem(Item::get(ITEM::SADDLE));
       $player->getInventory()->addItem(Item::get(ITEM::SLIMEBALL));
       $player->getInventory()->addItem(Item::get(ITEM::IRON_AXE));     
-      $player->getInventory()->addItem(Item::get(ITEM::SNOWBALL, 0, 16));     
-      $player->getInventory()->addItem(Item::get(ITEM::BED));     
+      $player->getInventory()->addItem(Item::get(ITEM::SNOWBALL, 0, 1));     
+      $player->getInventory()->addItem(Item::get(ITEM::BONE));     
 }
 //Partical
    if($item->getid() == 348){
@@ -308,15 +335,16 @@ if($item->getId() == 310){
    if($item->getId() == 355){
       $player->getInventory()->removeItem(Item::get(ITEM::BED));
       $player->getInventory()->removeItem(Item::get(ITEM::SLIMEBALL));
-      $player->getInventory()->removeItem(Item::get(ITEM::SNOWBALL, 0, 16));
+      $player->getInventory()->removeItem(Item::get(ITEM::SNOWBALL, 0, 10000));
       $player->getInventory()->removeItem(Item::get(ITEM::IRON_AXE));
       $player->getInventory()->removeItem(Item::get(ITEM::MINECART));
       $player->getInventory()->removeItem(Item::get(ITEM::GLOWSTONE));
-      $player->getInventory()->removeItem(Item::get(ITEM::FISHING_ROD));
+      $player->getInventory()->removeItem(Item::get(ITEM::SADDLE));
       $player->getInventory()->removeItem(Item::get(ITEM::DYE,15,1));
       $player->getInventory()->removeItem(Item::get(ITEM::DYE,4,1));
       $player->getInventory()->removeItem(Item::get(ITEM::DYE,1,1));
       $player->getInventory()->removeItem(Item::get(ITEM::DYE,14,1));
+      $player->getInventory()->removeItem(Item::get(ITEM::BONE));
       $player->getInventory()->addItem(Item::get(ITEM::CLOCK));
       $player->getInventory()->setHelmet(Item::get(ITEM::AIR));
       $player->getInventory()->setChestplate(Item::get(ITEM::AIR));
@@ -332,50 +360,85 @@ if($item->getId() == 310){
      if($i->getId() == 347){
      $p->sendPopup("§l§dCosmetic§eMenu");
      }
-     //6s
+     //Gadgets
      if($i->getId() == 328){
      $p->sendPopup("§l§6Gadgets");
      }
-     if($i->getId() == 346){
+     //EggLauncher
+     if($i->getId() == 329){
      $p->sendPopup("§l§6Egg§bLauncher");
      }
+     //EnderPearl
      if($i->getId() == 332){
-     $p->sendPopup("§l§6EnderPearl");
+     $p->sendPopup("§l§dEnderPearl");
      }
+     //BunnyHop
      if($i->getId() == 258){
      $p->sendPopup("§l§bBunnyHop");
      }
+     //FlyTime
      if($i->getId() == 288){
      $p->sendPopup("§l§6FlyTime");
      }
-     if($i->getId() == 331){
+     //ParticleBomb
+     if($i->getId() == 341){
      $p->sendPopup("§l§dParticle§eBomb");
      }
+     //Armours
      if($i->getId() == 310){
-     $p->sendPopup("§l§6Armours");
+     $p->sendPopup("§l§dArmours");
      }
+     //LightningStick
      if($i->getId() == 352){
-     $p->sendPopup("§l§6LightingStick");
+     $p->sendPopup("§l§6Lighting§aStick");
      } 
      //Partical
      if($i->getId() == 348){
      $p->sendPopup("§l§bParticals");
      }
+     //Water
      if($i->getId() == 351 && $i->getDamage() == 4){
      $p->sendPopup("§l§6Water");
      }
+     //Fire
      if($i->getId() == 351 && $i->getDamage() == 14){
      $p->sendPopup("§l§6Fire");
      }
+     //Hearts
      if($i->getId() == 351 && $i->getDamage() == 1){
      $p->sendPopup("§l§6Hearts");
      }
+     //Smoke
      if($i->getId() == 351 && $i->getDamage() == 15){
      $p->sendPopup("§l§6Smoke");
      }
      //Back
      if($i->getId() == 355){     
      $p->sendPopup("§l§7Back...");  
+     } 
+     //TNTLauncher
+     if($i->getId() == 352){     
+     $p->sendPopup("§l§cTNT§aLauncher");  
+      }
+          //Diamond Armour
+     if($i->getId() == 264){     
+     $p->sendPopup("§l§bDiamond §dAmour");  
+     } 
+               //Iron Armour
+     if($i->getId() == 265){     
+     $p->sendPopup("§l§fIron §dAmour");  
+     } 
+               //Chain Armour
+     if($i->getId() == 289){     
+     $p->sendPopup("§l§7Chain §dAmour");  
+     } 
+               //Gold Armour
+     if($i->getId() == 266){     
+     $p->sendPopup("§l§6Gold §dAmour");  
+     } 
+               //Leather Armour
+     if($i->getId() == 334){     
+     $p->sendPopup("§l§4Leather §dAmour");  
      } 
    }
     
@@ -384,30 +447,17 @@ if($item->getId() == 310){
             $loc = $snowball->getLocation();
             if($snowball->shootingEntity instanceof Player and $snowball instanceof Snowball) { // if the player is online
                 $snowball->shootingEntity->teleport(new Vector3($loc->x, $loc->y, $loc->z), $loc->yaw, $loc->pitch);
+                $snowball->shootingEntity->getInventory()->addItem(Item::get(ITEM::SNOWBALL,0,1)); 
             }
     }
-	public function spawnTo(Player $player) {
-		$pk = new AddItemEntityPacket;
-		$pk->eid = $this->getID();
-		$pk->x = $this->x;
-		$pk->y = $this->y;
-		$pk->z = $this->z;
-		$pk->yaw = $this->yaw;
-		$pk->pitch = $this->pitch;
-		$pk->item = Item::get(Item::EGG);
-		$pk->speedX = $this->motionX;
-		$pk->speedY = $this->motionY;
-		$pk->speedZ = $this->motionZ;
-		$player->dataPacket($pk);
-
-		$this->item = $pk->item;
-
-		Entity::spawnTo($player);
-	}
 /**
-* BunnyHop-Little is asigned on this
 * FlyPower
 * LightingStick
 * Particals-Emerald is asigned on this
 */
+public function ExplosionPrimeEvent(ExplosionPrimeEvent $p){
+          
+          $p->setBlockBreaking(false);
+          
+      }
 }
