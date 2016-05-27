@@ -178,7 +178,7 @@ if($item->getId() == 329){
 				  }
             break;
             case 15: // white: smoke
-				$particle = new HugeExplodeParticle(new Vector3($player->x, $player->y + 2, $player->z), 5);
+				$particle = new HugeExplodeParticle(new Vector3($player->x, $player->y + 2, $player->z), 2);
 			    $random = new Random((int) (microtime(true) * 1000) + mt_rand());
 					for($i = 0; $i < 90; ++$i){
 						$particle->setComponents(
@@ -222,6 +222,7 @@ if($item->getId() == 329){
    if($item->getId() == 347){
       $player->getInventory()->removeItem(Item::get(ITEM::CLOCK));
       $player->getInventory()->addItem(Item::get(ITEM::MINECART));
+      $player->getInventory()->addItem(Item::get(ITEM::PAINTING));
       $player->getInventory()->addItem(Item::get(ITEM::GLOWSTONE_DUST));
       $player->getInventory()->addItem(Item::get(ITEM::DIAMOND_HELMET));
 }
@@ -229,6 +230,7 @@ if($item->getId() == 329){
 if($item->getId() == 310){
       $player->getInventory()->removeItem(Item::get(ITEM::DIAMOND_HELMET));
       $player->getInventory()->removeItem(Item::get(ITEM::MINECART));
+      $player->getInventory()->removeItem(Item::get(ITEM::PAINTING));
       $player->getInventory()->removeItem(Item::get(ITEM::GLOWSTONE_DUST));
       $player->getInventory()->addItem(Item::get(ITEM::DIAMOND));
       $player->getInventory()->addItem(Item::get(ITEM::IRON_INGOT));
@@ -310,6 +312,7 @@ if($item->getId() == 310){
    if($item->getid() == 328){
        $player->getInventory()->removeItem(Item::get(ITEM::CLOCK));
       $player->getInventory()->removeItem(Item::get(ITEM::MINECART));
+      $player->getInventory()->removeItem(Item::get(ITEM::PAINTING));
       $player->getInventory()->removeItem(Item::get(ITEM::GLOWSTONE_DUST));
       $player->getInventory()->removeItem(Item::get(ITEM::DIAMOND_HELMET));
       $player->getInventory()->addItem(Item::get(ITEM::BED)); 
@@ -319,10 +322,50 @@ if($item->getId() == 310){
       $player->getInventory()->addItem(Item::get(ITEM::SNOWBALL, 0, 1));     
       $player->getInventory()->addItem(Item::get(ITEM::BONE));     
 }
+//Hats
+   if($item->getid() == 321){
+       $player->getInventory()->removeItem(Item::get(ITEM::CLOCK));
+      $player->getInventory()->removeItem(Item::get(ITEM::MINECART));
+      $player->getInventory()->removeItem(Item::get(ITEM::PAINTING));
+      $player->getInventory()->removeItem(Item::get(ITEM::GLOWSTONE_DUST));
+      $player->getInventory()->removeItem(Item::get(ITEM::DIAMOND_HELMET));
+      $player->getInventory()->addItem(Item::get(ITEM::BED)); 
+      $player->getInventory()->addItem(Item::get(ITEM::SEEDS));
+      $player->getInventory()->addItem(Item::get(ITEM::STEAK));
+      $player->getInventory()->addItem(Item::get(ITEM::COOKIE));     
+      $player->getInventory()->addItem(Item::get(ITEM::PAPER));     
+      $player->getInventory()->addItem(Item::get(ITEM::BUCKET));     
+}
+//SeedsHat
+ if($item->getId() == 295){
+    $player->getInventory()->setHelmet(Item::get(ITEM::SEEDS)); 
+     $player->sendPopup("§l§aPlop!");  
+     } 
+	//SteakHat
+	 if($item->getId() == 364){
+		$player->getInventory()->setHelmet(Item::get(ITEM::STEAK));     
+		$player->sendPopup("§l§aPlop!");  
+	}
+	//CookieHat
+	 if($item->getId() == 357){
+    $player->getInventory()->setHelmet(Item::get(ITEM::COOKIE));     
+    $player->sendPopup("§l§aPlop!");  
+	}
+	//PaperHat
+	 if($item->getId() == 339){
+    $player->getInventory()->setHelmet(Item::get(ITEM::PAPER));     
+    $player->sendPopup("§l§aPlop!");  
+	}
+	//BucketHat
+	 if($item->getId() == 325){
+    $player->getInventory()->setHelmet(Item::get(ITEM::BUCKET));     
+    $player->sendPopup("§l§aPlop!");  
+	}
 //Partical
    if($item->getid() == 348){
        $player->getInventory()->removeItem(Item::get(ITEM::CLOCK));
       $player->getInventory()->removeItem(Item::get(ITEM::MINECART));
+       $player->getInventory()->removeItem(Item::get(ITEM::PAINTING));
       $player->getInventory()->removeItem(Item::get(ITEM::GLOWSTONE_DUST));
       $player->getInventory()->removeItem(Item::get(ITEM::DIAMOND_HELMET));
       $player->getInventory()->addItem(Item::get(ITEM::BED));
@@ -338,7 +381,13 @@ if($item->getId() == 310){
       $player->getInventory()->removeItem(Item::get(ITEM::SNOWBALL, 0, 10000));
       $player->getInventory()->removeItem(Item::get(ITEM::IRON_AXE));
       $player->getInventory()->removeItem(Item::get(ITEM::MINECART));
+      $player->getInventory()->removeItem(Item::get(ITEM::PAINTING));
       $player->getInventory()->removeItem(Item::get(ITEM::GLOWSTONE));
+       $player->getInventory()->removeItem(Item::get(ITEM::STEAK));
+       $player->getInventory()->removeItem(Item::get(ITEM::SEEDS));
+       $player->getInventory()->removeItem(Item::get(ITEM::COOKIE));
+       $player->getInventory()->removeItem(Item::get(ITEM::PAPER));
+       $player->getInventory()->removeItem(Item::get(ITEM::BUCKET));
       $player->getInventory()->removeItem(Item::get(ITEM::SADDLE));
       $player->getInventory()->removeItem(Item::get(ITEM::DYE,15,1));
       $player->getInventory()->removeItem(Item::get(ITEM::DYE,4,1));
@@ -439,6 +488,30 @@ if($item->getId() == 310){
                //Leather Armour
      if($i->getId() == 334){     
      $p->sendPopup("§l§4Leather §dAmour");  
+     } 
+                    //SeedsHat
+     if($i->getId() == 295){     
+     $p->sendPopup("§l§3Seeds §eHat");  
+     } 
+     //SteakHat
+     if($i->getId() == 364){     
+     $p->sendPopup("§l§4Steak §eHat");  
+     } 
+     //CookieHat
+     if($i->getId() == 357){     
+     $p->sendPopup("§l§6Cookie §eHat");  
+     } 
+     //PaperHat
+     if($i->getId() == 339){     
+     $p->sendPopup("§l§fPaper §eHat");  
+     } 
+     //BucketHat
+     if($i->getId() == 325){     
+     $p->sendPopup("§l§7Bucket §eHat");  
+     } 
+          //Hats
+     if($i->getId() == 321){     
+     $p->sendPopup("§l§eHat");  
      } 
    }
     
