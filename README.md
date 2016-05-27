@@ -12,6 +12,12 @@ A plugin that let you use gadgets with a tap of a clock.
   - [x] TNTLauncher
   - [x] EnderPearl 
   - [ ] Lightning stick
+- [x] Hats
+  - [x] Seed Hat
+  - [x] Steak Hat
+  - [x] Cookie Hat
+  - [x] Paper Hat
+  - [x] Bucket Hat
 - [x] Armour
   - [x] Diamond
   - [x] Iron
