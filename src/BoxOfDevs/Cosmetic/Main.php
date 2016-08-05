@@ -30,6 +30,7 @@ use pocketmine\item\Item;
 use pocketmine\Player;
 use pocketmine\block\Air;
 use pocketmine\network\protocol\AddItemEntityPacket;
+use pocketmine\event\player\PlayerRespawnEvent;
 
 Class Main extends PluginBase implements Listener{
        //EnderPearl
@@ -42,6 +43,10 @@ Class Main extends PluginBase implements Listener{
         $this->getServer()->getPluginManager()->registerEvents($this, $this);
         $this->getLogger()->info("§aCosmeticMenu by BoxOfDevs loaded ;D!");
         }
+       public function playerSpawnEvent(PlayerRespawnEvent $ev) {
+       	$item = new Item(347,1,1);
+       	$ev->getPlayer()->getInventory()->addItem($item);
+       }
        public function onPacketReceived(DataPacketReceiveEvent $event){
             $pk = $event->getPacket();
             $player = $event->getPlayer();
